@@ -69,6 +69,9 @@ const Navbar = () => {
 
   return (
     <Nav>
+      <h1 onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+        Home
+      </h1>
       <SearchContainer>
         <SearchInput
           type="text"

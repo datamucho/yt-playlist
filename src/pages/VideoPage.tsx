@@ -15,45 +15,12 @@ import {
   VideoThumbnail,
   VideoTitle,
   VideoWrapper,
+  StyledDropdown,
+  StyledButton,
 } from "../styles";
 import videoStore from "../stores/videos.store";
 import playlistStore from "../stores/playlist.store";
-import axios from "axios";
-import styled from "styled-components";
 import addVideoToPlaylist from "../services/addVideoToPlaylist";
-
-const BASE_URI = "https://youtube.thorsteinsson.is/api";
-
-// Styled components
-const StyledDropdown = styled.select`
-  padding: 10px 15px;
-  margin-top: 15px;
-  margin-right: 10px;
-  border-radius: 5px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-  }
-`;
-
-const StyledButton = styled.button`
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
 
 const VideoDetailsPage = () => {
   const { videoId } = useParams();
@@ -64,7 +31,7 @@ const VideoDetailsPage = () => {
   });
 
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
-  const { playlists } = playlistStore((state) => state);
+  const { playlists, setPlaylists } = playlistStore((state) => state);
   const videos = videoStore((state) => state.videos);
 
   const handleAddToPlaylist = async () => {
@@ -74,11 +41,29 @@ const VideoDetailsPage = () => {
 
     const video = {
       videoId,
-      title: videoDetails?.title,
-      thumbnailUrl: videoDetails?.thumbnail,
+      ...videoDetails,
     };
 
-    console.log(await addVideoToPlaylist(selectedPlaylistId, video));
+    const response = await addVideoToPlaylist(selectedPlaylistId, video);
+    if (!response?.name) {
+      return;
+    }
+
+    console.log({ response });
+
+    const updatedPlaylists = playlists.map((playlist) => {
+      if (playlist.name === response.name) {
+        return {
+          ...playlist,
+          videos: response.videos,
+        };
+      }
+
+      return playlist;
+    });
+
+    localStorage.setItem("playlists", JSON.stringify(updatedPlaylists));
+    setPlaylists(updatedPlaylists);
   };
 
   return (
@@ -93,22 +78,24 @@ const VideoDetailsPage = () => {
                 allowFullScreen
               ></VideoIframe>
             </VideoWrapper>
-            <VideoTitle>{videoDetails.title}</VideoTitle>
-            <VideoDescription>{videoDetails.description}</VideoDescription>
-            <StyledDropdown
-              onChange={(e) => setSelectedPlaylistId(e.target.value)}
-              value={selectedPlaylistId}
-            >
-              <option value="">Select a playlist</option>
-              {playlists.map((playlist) => (
-                <option key={playlist.id} value={playlist.id}>
-                  {playlist.name}
-                </option>
-              ))}
-            </StyledDropdown>
-            <StyledButton onClick={handleAddToPlaylist}>
-              Add to Playlist
-            </StyledButton>
+            <div>
+              <VideoTitle>{videoDetails.title}</VideoTitle>
+              <VideoDescription>{videoDetails.description}</VideoDescription>
+              <StyledDropdown
+                onChange={(e) => setSelectedPlaylistId(e.target.value)}
+                value={selectedPlaylistId}
+              >
+                <option value="">Select a playlist</option>
+                {playlists.map((playlist) => (
+                  <option key={playlist.id} value={playlist.id}>
+                    {playlist.name}
+                  </option>
+                ))}
+              </StyledDropdown>
+              <StyledButton onClick={handleAddToPlaylist}>
+                Add to Playlist
+              </StyledButton>
+            </div>
           </>
         )}
       </Container>

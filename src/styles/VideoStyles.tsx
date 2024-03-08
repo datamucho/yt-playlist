@@ -69,7 +69,36 @@ const VideoDesc = styled.p`
   font-size: 14px;
 `;
 
-// Assume VideoColumns is already defined and styled appropriately
+const StyledDropdown = styled.select`
+  padding: 10px 15px;
+  margin-top: 15px;
+  margin-right: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+`;
+
+const StyledButton = styled.button`
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 15px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
 
 export {
   Container,
@@ -84,4 +113,6 @@ export {
   VideoInfo,
   VideoT,
   VideoDesc,
+  StyledDropdown,
+  StyledButton,
 };

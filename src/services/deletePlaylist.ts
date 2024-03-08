@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URI } from "../constants";
 
-const deletePlaylist = async (playlistId: number) => {
+const deletePlaylist = async (playlistId: string) => {
   try {
     const response = await axios.delete(`${BASE_URI}/playlists/${playlistId}`);
     return response; // Or handle the response as needed

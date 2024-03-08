@@ -1,20 +1,16 @@
 import { create } from "zustand";
-import { videoType } from "../types";
-
-type playlistType = {
-  id: string;
-  name: string;
-};
+import { Playlist, videoType } from "../types";
 
 interface PlaylistStoreType {
-  playlists: playlistType[];
-  setPlaylists: (playlist: playlistType[]) => void;
-  videos: { [key: string]: videoType[] };
+  playlists: Playlist[];
+  setPlaylists: (playlist: Playlist[]) => void;
+  playlistVideos: { [key: string]: videoType[] };
 }
 
 const playlistStore = create<PlaylistStoreType>((set) => ({
   playlists: [],
-  setPlaylists: (playlists: playlistType[]) => set({ playlists }),
+  setPlaylists: (playlists: Playlist[]) => set({ playlists }),
+  playlistVideos: {},
 }));
 
 export default playlistStore;

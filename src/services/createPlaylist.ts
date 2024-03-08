@@ -9,7 +9,7 @@ const createPlaylist = async (name: string) => {
       }
     );
 
-    return response;
+    return response?.data;
   } catch (_) {
     console.error("Error creating the playlist:");
   }

@@ -7,7 +7,7 @@ const Nav = styled.nav`
   color: white;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  // justify-content: space-between;
   padding: 0.75rem 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 `;

@@ -13,6 +13,7 @@ const SearchContainer = styled.div`
   display: flex;
   animation: ${fadeIn} 0.5s ease-out;
   justify-content: center;
+  margin-left: 25px;
 `;
 
 const SearchInput = styled.input`
