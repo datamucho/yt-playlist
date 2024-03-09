@@ -6,7 +6,7 @@ const getPlaylist = async (playlistId: string) => {
       `https://youtube.thorsteinsson.is/api/playlists/${playlistId}`
     );
 
-    return response;
+    return response.data;
   } catch (error) {
     console.error("Error retrieving the playlist:");
   }

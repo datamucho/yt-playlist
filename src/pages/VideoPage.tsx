@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import getVideoDetails from "../services/getVideoDetails";
 import {
@@ -33,6 +33,7 @@ const VideoDetailsPage = () => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const { playlists, setPlaylists } = playlistStore((state) => state);
   const videos = videoStore((state) => state.videos);
+  const navigate = useNavigate();
 
   const handleAddToPlaylist = async () => {
     if (!selectedPlaylistId || !videoId) {
@@ -49,8 +50,6 @@ const VideoDetailsPage = () => {
       return;
     }
 
-    console.log({ response });
-
     const updatedPlaylists = playlists.map((playlist) => {
       if (playlist.name === response.name) {
         return {
@@ -64,6 +63,10 @@ const VideoDetailsPage = () => {
 
     localStorage.setItem("playlists", JSON.stringify(updatedPlaylists));
     setPlaylists(updatedPlaylists);
+  };
+
+  const handleVideoSelect = (videoId: string) => {
+    navigate(`/video/${videoId}/`);
   };
 
   return (
@@ -101,7 +104,7 @@ const VideoDetailsPage = () => {
       </Container>
       <VideoColumns>
         {videos?.map((video) => (
-          <VideoEl key={video.id}>
+          <VideoEl key={video.id} onClick={() => handleVideoSelect(video.id)}>
             <VideoThumbnail src={video.thumbnail} alt={video.title} />
             <VideoInfo>
               <VideoT>{video.title}</VideoT>

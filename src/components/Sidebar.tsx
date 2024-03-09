@@ -11,12 +11,18 @@ import {
 } from "../styles";
 import { usePlaylists } from "../hooks/usePlaylists";
 import { useNavigate } from "react-router-dom";
+import updatePlaylist from "../services/updatePlaylist";
+import getPlaylist from "../services/getPlaylist";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const { addPlaylist, playlists, removePlaylist, updatePlaylist } =
-    usePlaylists();
+  const {
+    addPlaylist,
+    playlists,
+    removePlaylist,
+    updatePlaylist: update,
+  } = usePlaylists();
 
   const handleCreatePlaylist = async () => {
     const playlistName = prompt("Enter playlist name");
@@ -25,10 +31,15 @@ const Sidebar = () => {
     }
   };
 
-  const handleEditPlaylist = (playlistId: string) => {
+  const handleEditPlaylist = async (playlistId: string) => {
     const newName = prompt("Enter new playlist name");
+
     if (newName) {
-      updatePlaylist(playlistId, newName);
+      const playlist = await getPlaylist(playlistId);
+
+      updatePlaylist(playlistId, playlist);
+
+      update(playlistId, newName);
     }
   };
 
